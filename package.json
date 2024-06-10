@@ -1,0 +1,16 @@
+{
+  "name": "base-de-datos-biblioteca",
+  "version": "1.0.0",
+  "description": "Base de datos para Biblioteca Escolar",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Adrian y Virginia",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.19.2",
+    "mysql2": "^3.10.0",
+    "sequelize": "^6.37.3"
+  }
+}

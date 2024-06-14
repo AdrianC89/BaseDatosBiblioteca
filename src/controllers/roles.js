@@ -24,8 +24,9 @@ roleRouter.get('/roles/:id', async(req,res) => {
 
 roleRouter.post('/roles', async(req,res) => {
     try {
-        const {role_name} = req.body
+        const {role_id, role_name} = req.body
         const newRole = await Role.create({
+            role_id,
             role_name
         })
         res.status(201).json(newRole)
@@ -46,16 +47,23 @@ roleRouter.put('/roles/:id', async(req,res) => {
     }
 })
 
-roleRouter.delete('/roles/:id', async(req,res) => {
+roleRouter.delete('/roles/:id', async (req, res) => {
     try {
-        const {id} = req.params
-        await Role.destroy({
-            where: {id}
-        })
-        res.status(204).end()
+        const { id } = req.params;
+        console.log(`Attempting to delete role with ID: ${id}`);
+        const result = await Role.destroy({
+            where: { role_id: id }
+        });
+        console.log(`Delete result: ${result}`);
+        if (result) {
+            res.status(204).end();
+        } else {
+            res.status(404).json({ error: "Role not found" });
+        }
     } catch (error) {
-        res.status(500).json({error: error.message})
+        console.error(`Error deleting role: ${error.message}`);
+        res.status(500).json({ error: error.message });
     }
-})
+});
 
 export default roleRouter

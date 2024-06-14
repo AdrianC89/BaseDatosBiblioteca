@@ -1,5 +1,7 @@
 import express from 'express';
 import sequelize from './database/connect.js';
+import './models/user.js'
+import roleRouter from './controllers/roles.js';
 
 const app = express();
 
@@ -18,7 +20,9 @@ app.get('/', (req, res) => {
     res.json({ message: 'todo ok' });
 });
 
-const PORT = process.env.PORT || 8080;
+app.use(roleRouter);
+
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
     console.log(`servidor corriendo en ${PORT}`);
 });

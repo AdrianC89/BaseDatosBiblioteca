@@ -1,8 +1,7 @@
 import { Router } from "express";
-import { Router } from "express";
-import { user } from "../models/user.js";
+import user  from "../models/user.js";
 
-const usersRouter = Router()
+const usersRouter = Router();
 
 usersRouter.get('/users', async (req, res) => {
     try {
@@ -17,7 +16,7 @@ usersRouter.get('/users/:id', async (req, res) => {
     try {
         const { id } = req.params
         const foundUser = await user.findByPk(id)
-        res.json(foundUser)
+        res.json(user)
     } catch (error) {
         res.status(500).json({ error: error.message })
     }
@@ -45,10 +44,10 @@ usersRouter.post('/users', async (req, res) => {
 usersRouter.put('/users/:id', async (req, res) => {
     try {
         const { id } = req.params
-        const foundUser = await user.findByPk(id)
-        if (foundUser) {
-            await foundUser.update(req.body)
-            res.status(202).json(foundUser)
+        const User = await user.findByPk(id)
+        if (User) {
+            await User.update(req.body)
+            res.status(202).json(User)
         } else {
             res.status(404).json({ error: 'User not found' })
         }

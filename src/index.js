@@ -2,6 +2,8 @@ import express from 'express';
 import sequelize from './database/connect.js';
 import './models/user.js'
 import roleRouter from './controllers/roles.js';
+import usersRouter from './controllers/users.js';
+
 
 const app = express();
 
@@ -21,6 +23,7 @@ app.get('/', (req, res) => {
 });
 
 app.use(roleRouter);
+app.use(usersRouter);
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {

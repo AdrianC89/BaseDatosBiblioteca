@@ -1,11 +1,11 @@
 import { Router } from "express";
-import user  from "../models/user.js";
+import User from "../models/user.js";
 
 const usersRouter = Router();
 
 usersRouter.get('/users', async (req, res) => {
     try {
-        const users = await user.findAll()
+        const users = await User.findAll()
         res.json(users)
     } catch (error) {
         res.status(500).json({ error: error.message })
@@ -14,8 +14,8 @@ usersRouter.get('/users', async (req, res) => {
 
 usersRouter.get('/users/:id', async (req, res) => {
     try {
-        const { id } = req.params
-        const foundUser = await user.findByPk(id)
+        const {id} = req.params
+        const user = await User.findByPk(id)
         res.json(user)
     } catch (error) {
         res.status(500).json({ error: error.message })
@@ -24,16 +24,13 @@ usersRouter.get('/users/:id', async (req, res) => {
 
 usersRouter.post('/users', async (req, res) => {
     try {
-        const { user_id, username, password_hash, email, created_at, updated_at, role_id, is_moroso } = req.body
-        const newUser = await user.create({
+        const { user_id, username, password_hash, email, role_id } = req.body
+        const newUser = await User.create({
             user_id,
             username,
             password_hash,
             email,
-            created_at,
-            updated_at,
-            role_id,
-            is_moroso
+            role_id
         })
         res.status(201).json(newUser)
     } catch (error) {
@@ -44,8 +41,8 @@ usersRouter.post('/users', async (req, res) => {
 usersRouter.put('/users/:id', async (req, res) => {
     try {
         const { id } = req.params
-        const User = await user.findByPk(id)
-        if (User) {
+        const user = await User.findByPk(id)
+        if (user) {
             await User.update(req.body)
             res.status(202).json(User)
         } else {
@@ -58,17 +55,20 @@ usersRouter.put('/users/:id', async (req, res) => {
 
 usersRouter.delete('/users/:id', async (req, res) => {
     try {
-        const { id } = req.params
-        const rowsDeleted = await user.destroy({
-            where: { id }
-        })
-        if (rowsDeleted) {
-            res.status(204).end()
+        const { id } = req.params;
+        console.log(`Attempting to delete user with ID: ${id}`);
+        const result = await User.destroy({
+            where: { user_id: id }
+        });
+        console.log(`Delete result: ${result}`);
+        if (result) {
+            res.status(204).end();
         } else {
-            res.status(404).json({ error: 'User not found' })
+            res.status(404).json({ error: "User not found" });
         }
     } catch (error) {
-        res.status(500).json({ error: error.message })
+        console.error(`Error deleting user: ${error.message}`);
+        res.status(500).json({ error: error.message });
     }
 })
 
